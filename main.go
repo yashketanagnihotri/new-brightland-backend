@@ -16,7 +16,7 @@ type FormData struct {
 }
 
 func main() {
-	http.HandleFunc("/submit-query", handleQuery)
+	http.HandleFunc("/submit-query", corsMiddleware(handleQuery))
 
 	fmt.Println("Server started at :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -66,6 +66,25 @@ func sendEmail(data FormData) error {
 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, []string{to}, []byte(msg))
 	return err
 }
+
+
+// CORS middleware
+func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Allow all origins (for dev only)
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	}
+}
+
 
 /*
 
