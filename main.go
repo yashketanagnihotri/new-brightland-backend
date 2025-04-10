@@ -49,7 +49,7 @@ func sendEmail(data FormData) error {
 	// Replace with your SMTP server details
 	from := "yashagni1992@gmail.com"
 	password := "zvcs khen mngc uqdm"
-	to := "yashagni1992@gmail.com"
+	to := "newbrightlandbhopal@gmail.com"
 
 	smtpHost := "smtp.gmail.com"
 	smtpPort := "587"
